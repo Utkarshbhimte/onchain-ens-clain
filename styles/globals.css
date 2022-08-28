@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import "./satoshi.css";
+
+body {
+    font-family: 'Satoshi';
+    @apply min-h-screen w-screen;
+}
+
+.blob {
+    position: absolute;
+    width: 1777px;
+    height: 1777px;
+    left: -168px;
+    top: -1009px;
+
+    background: radial-gradient(36.48% 36.48% at 50% 50%, rgba(22, 73, 255, 0.5) 0%, rgba(22, 73, 255, 0) 100%);
+    filter: blur(500px);
+
+}
+
+.decorative-stuff {
+    user-select: none;
+    pointer-events: none;
+}
+
+input[type="text"] {
+    background: transparent;
+    border: none;
+}
+
+h1 {
+    line-height: 120% !important;
+}
