@@ -7,37 +7,37 @@ import { publicProvider } from "wagmi/providers/public";
 import type { AppProps } from "next/app";
 
 const selectedChain =
-  Number(process.env.NEXT_PUBLIC_CHAIN_ID) === 4
-    ? chain.rinkeby
-    : chain.mainnet;
+	Number(process.env.NEXT_PUBLIC_CHAIN_ID) === 4
+		? chain.rinkeby
+		: chain.mainnet;
 
 const { chains, provider } = configureChains(
-  [selectedChain],
-  [
-    jsonRpcProvider({ rpc: () => ({ http: "https://rpc.ankr.com/eth" }) }),
-    publicProvider(),
-  ]
+	[selectedChain],
+	[
+		jsonRpcProvider({ rpc: () => ({ http: "https://rpc.ankr.com/eth" }) }),
+		publicProvider(),
+	]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "OnChain Identity",
-  chains,
+	appName: "OnChain Identity",
+	chains,
 });
 
 const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
+	autoConnect: true,
+	connectors,
+	provider,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider chains={chains}>
-        <Component {...pageProps} />
-      </RainbowKitProvider>
-    </WagmiConfig>
-  );
+	return (
+		<WagmiConfig client={wagmiClient}>
+			<RainbowKitProvider chains={chains}>
+				<Component {...pageProps} />
+			</RainbowKitProvider>
+		</WagmiConfig>
+	);
 }
 
 export default MyApp;
