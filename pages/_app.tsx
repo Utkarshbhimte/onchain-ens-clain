@@ -1,21 +1,26 @@
-import '../styles/globals.css';
-import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { chain, configureChains, createClient, WagmiConfig } from 'wagmi';
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { publicProvider } from 'wagmi/providers/public';
-import type { AppProps } from 'next/app';
+import "../styles/globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { publicProvider } from "wagmi/providers/public";
+import type { AppProps } from "next/app";
+
+const selectedChain =
+  Number(process.env.NEXT_PUBLIC_CHAIN_ID) === 4
+    ? chain.rinkeby
+    : chain.mainnet;
 
 const { chains, provider } = configureChains(
-  [chain.mainnet],
+  [selectedChain],
   [
-    jsonRpcProvider({ rpc: () => ({ http: 'https://rpc.ankr.com/eth' }) }),
+    jsonRpcProvider({ rpc: () => ({ http: "https://rpc.ankr.com/eth" }) }),
     publicProvider(),
   ]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
+  appName: "OnChain Identity",
   chains,
 });
 
