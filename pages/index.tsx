@@ -2,21 +2,19 @@ import Button from "@/components/Button";
 import { BuildConnectButton } from "@/components/Button/ConnectButton";
 import WavesImage from "@/components/Waves";
 import useWhiteList from "@/hooks/useWhiteList";
+import { buildContract } from "@/utils/buildContract";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAccount, useContract, useNetwork, useSigner } from "wagmi";
-import web3 from 'web3'
 import { useRouter } from "next/router";
-import { buildContract } from "@/utils/buildContract";
+import { useCallback, useEffect, useState } from "react";
+import { useAccount, useNetwork } from "wagmi";
+import web3 from 'web3';
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
 	const { isConnected, address, isConnecting } = useAccount();
 	const { chain } = useNetwork();
 	const router = useRouter();
-
-	const signer = useSigner();
 
 	const { onWhiteList, proof } = useWhiteList(address)
 
