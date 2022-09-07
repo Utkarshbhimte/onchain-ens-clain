@@ -5,6 +5,8 @@ import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
 import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { publicProvider } from "wagmi/providers/public";
 import type { AppProps } from "next/app";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const selectedChain =
 	Number(process.env.NEXT_PUBLIC_CHAIN_ID) === 4
@@ -35,6 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		<WagmiConfig client={wagmiClient}>
 			<RainbowKitProvider chains={chains}>
 				<Component {...pageProps} />
+				<ToastContainer position="top-center" />
 			</RainbowKitProvider>
 		</WagmiConfig>
 	);

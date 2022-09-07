@@ -7,12 +7,13 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useAccount, useNetwork } from "wagmi";
 import web3 from 'web3';
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
-	const { isConnected, address, isConnecting } = useAccount();
+	const { isConnected, address } = useAccount();
 	const { chain } = useNetwork();
 	const router = useRouter();
 
@@ -20,7 +21,6 @@ const Home: NextPage = () => {
 
 	const [loading, setLoading] = useState(false);
 	const [name, setName] = useState('')
-	const [isAvailable, setIsAvailable] = useState(false)
 	const [hasClaimed, setHasClaimed] = useState(false);
 
 	// const contract = useContract({
@@ -34,26 +34,21 @@ const Home: NextPage = () => {
 
 	const isLoginSuccessful = isValidChain && isConnected;
 
-	const checkEnsAvailability = useCallback(async () => {
-		setLoading(true)
-		try {
-			const response = await buildContract()?.domainMap(name)
-			setIsAvailable(!web3.utils.toAscii(response).replaceAll('\u0000', "").length)
-		} catch (error) {
-			console.error(error)
-		} finally {
-			setLoading(false)
-		}
-	}, [name])
-
 	const claimEns = useCallback(async () => {
 		setLoading(true)
 		try {
+			const response = await buildContract()?.domainMap(name)
+			if(!!web3.utils.toAscii(response).replaceAll('\u0000', "").length) {
+				toast.error('ens domain not available!');
+				setLoading(false);
+				return;
+			}
 			const tx = await buildContract()?.claimSubdomain(
 				name,
 				proof
 			)
 			await tx.wait();
+			setHasClaimed(true);
 			router.push('/congratulations')
 			console.log('Transaction successfull')
 		} catch (error) {
@@ -107,16 +102,36 @@ const Home: NextPage = () => {
 				<div className="blob decorative-stuff"/>
 			</div>
 			<div className="max-w-4xl mx-auto md:mb-12 px-4 md:px-0">
-				<div className="text-center md:mb-24 mb-12">
-					<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
-						Welcome, <br /> Let’s get you a custom <br /> ENS
-						subdomain
-					</h1>
-					<p className="md:text-xl text-md">
-						You can use this to easily recieve & send tokens in your
-						wallet.
-					</p>
-				</div>
+				{
+					!hasClaimed && (
+						<div className="text-center md:mb-24 mb-12">
+							<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
+								{
+									onWhiteList ? (
+										<>
+											Welcome, <br /> Let’s get you a custom <br /> ENS subdomain
+										</>
+									) : (
+										<>Sorry this wallet is not whitelisted</>
+									)
+								}
+							</h1>
+							<p className="md:text-xl text-md">
+								{
+									onWhiteList ? (
+										<>
+											You can use this to easily recieve & send tokens in your wallet.
+										</>
+									) : (
+										<>
+											You can use this to easily recieve & send tokens in your wallet.
+										</>
+									)
+								}
+							</p>
+						</div>
+					)
+				}
 
 				{
 					!isLoginSuccessful ? (
@@ -126,9 +141,24 @@ const Home: NextPage = () => {
 					) : onWhiteList 
 					? hasClaimed 
 					? (
-						<p className="md:text-xl text-md">
-							You have already claimed ens
-						</p>
+						<div className="text-white p-12 backdrop-blur-md flex flex-col space-y-12 m-auto border border-white rounded-3xl w-auto">
+							<div className="font-bold text-4xl">Congratulations 🥳,</div>
+							<div className="text-2xl flex flex-col">
+								You've successfully registered your ens now!
+								<div className="text-base mt-4">
+									<div>
+										Go ahead and set your records, eth address avatars
+										and customise your subdomain!
+									</div>
+									<div>
+										Aur bhai @0xbhaisaab.eth give the content for this
+									</div>
+								</div>
+							</div>
+							<div className="w-full">
+								<Button fullWidth>Flaunt this on Twitter</Button>
+							</div>
+						</div>
 					)
 					: (
 						<form className="">
@@ -141,7 +171,6 @@ const Home: NextPage = () => {
 										value={name}
 										onChange={(e) => {
 											setName(e.target.value)
-											isAvailable && setIsAvailable(false)
 										}}
 									/>
 									<span className="text-white">
@@ -152,16 +181,15 @@ const Home: NextPage = () => {
 							{
 								!!isLoginSuccessful && (
 									<div className="flex items-center justify-around">
-										<Button loading={loading} onClick={checkEnsAvailability} disabled={isAvailable}>Check availability</Button>
-										{isAvailable && <Button loading={loading} onClick={claimEns}>Claim Your ENS!</Button>}
+										<Button loading={loading} onClick={claimEns}>Claim Your ENS!</Button>
 									</div>
 								)
 							}
 						</form>
 					) : (
-						<p className="md:text-xl text-md">
-							Not on whitelist
-						</p>
+						<>
+							<img className="mx-auto" src="https://media4.giphy.com/media/l0ErQ2UfBNFEIlqjC/giphy.gif?cid=ecf05e47f69jrncvqz3b3ttzqco0sp1dxj2iz56bizguntrx&rid=giphy.gif&ct=g" alt="gif" />
+						</>
 					)
 				}
 			</div>
