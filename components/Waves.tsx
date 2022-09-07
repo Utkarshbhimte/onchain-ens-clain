@@ -1,12 +1,12 @@
 import * as React from "react";
 
-const WavesImage: React.FC<{ classNames?: string }> = (props) => (
+const WavesImage: React.FC<{ classnames?: string }> = (props) => (
   <svg
     width={1440}
     height={900}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={props.classNames || ""}
+    className={props.classnames || ""}
     {...props}
   >
     <g opacity={0.1} strokeWidth={5.395}>

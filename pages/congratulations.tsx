@@ -28,8 +28,8 @@ const Congratulation = () => {
 				</div>
 			</div>
 			<div className="absolute top-0 left-0 w-screen h-screen decorative-stuff overflow-hidden">
-				<WavesImage classNames="absolute top-0 right-0 decorative-stuff" />
-				<div className="blob decorative-stuff"></div>
+				<WavesImage classnames="absolute top-0 right-0 decorative-stuff" />
+				<div className="blob decorative-stuff"/>
 			</div>
 			<div className="text-white p-12 backdrop-blur-md flex flex-col space-y-12 m-auto border border-white rounded-3xl w-auto">
 				<div className="font-bold text-4xl">Congratulations 🥳,</div>
