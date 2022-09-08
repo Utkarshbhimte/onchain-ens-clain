@@ -6,7 +6,11 @@ const useWhiteList = (address?: string) => {
     const [proof, setProof] = useState<string[]>([]);
 
     useEffect(() => {
-        if(!address?.length) return;
+        if(!address?.length) {
+            setOnWhiteList(false);
+            setProof([]);
+            return;
+        };
         const { isPresent, proof } = verifyWeb(address);
         setProof(proof);
         setOnWhiteList(isPresent);

@@ -13,7 +13,7 @@ import web3 from 'web3';
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
-	const { isConnected, address } = useAccount();
+	const { isConnected, address, isDisconnected } = useAccount();
 	const { chain } = useNetwork();
 	const router = useRouter();
 
@@ -77,6 +77,12 @@ const Home: NextPage = () => {
 		checkIfAlreadyExists()
 	}, [address, isConnected])
 
+	useEffect(() => {
+		if(isDisconnected) setHasClaimed(false)
+	}, [isDisconnected])
+	
+	const shouldShowMsg = (isDisconnected ? true : onWhiteList)
+
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
@@ -107,7 +113,7 @@ const Home: NextPage = () => {
 						<div className="text-center md:mb-24 mb-12">
 							<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
 								{
-									onWhiteList ? (
+									shouldShowMsg ? (
 										<>
 											Welcome, <br /> Let’s get you a custom <br /> ENS subdomain
 										</>
@@ -118,7 +124,7 @@ const Home: NextPage = () => {
 							</h1>
 							<p className="md:text-xl text-md">
 								{
-									onWhiteList ? (
+									shouldShowMsg ? (
 										<>
 											You can use this to easily recieve & send tokens in your wallet.
 										</>
