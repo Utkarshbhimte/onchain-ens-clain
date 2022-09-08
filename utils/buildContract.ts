@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers, Signer } from "ethers";
 import buildContractABI from '../abis/build.json';
 
 declare let window: any;

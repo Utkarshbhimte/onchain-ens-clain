@@ -8,8 +8,9 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount, useContract, useNetwork, useSigner } from "wagmi";
 import web3 from 'web3';
+import buildContractABI from '../abis/build.json';
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
@@ -20,8 +21,11 @@ const Home: NextPage = () => {
 	const { onWhiteList, proof } = useWhiteList(address)
 
 	const [loading, setLoading] = useState(false);
-	const [name, setName] = useState('')
+	const [name, setName] = useState('');
+	const [ensName, setEnsName] = useState('');
 	const [hasClaimed, setHasClaimed] = useState(false);
+
+	// const signer = useSigner();
 
 	// const contract = useContract({
 	// 	addressOrName: '0x7CEbc67ad1f0d0391781bD80cc608369303dab80',
@@ -37,19 +41,22 @@ const Home: NextPage = () => {
 	const claimEns = useCallback(async () => {
 		setLoading(true)
 		try {
-			const response = await buildContract()?.domainMap(name)
+			const temp = await buildContract(address)?.merkleHash
+			console.log(temp)
+			const response = await buildContract(address)?.domainMap(name)
 			if(!!web3.utils.toAscii(response).replaceAll('\u0000', "").length) {
 				toast.error('ens domain not available!');
 				setLoading(false);
 				return;
 			}
-			const tx = await buildContract()?.claimSubdomain(
+			const tx = await buildContract(address)?.claimSubdomain(
 				name,
 				proof
 			)
 			await tx.wait();
 			setHasClaimed(true);
-			router.push('/congratulations')
+			toast.success('Ens Claimed Successfully');
+			// router.push('/congratulations')
 			console.log('Transaction successfull')
 		} catch (error) {
 			console.error(error)
@@ -66,6 +73,12 @@ const Home: NextPage = () => {
 				address.toLowerCase()
 			)
 			setHasClaimed(!!web3.utils.toAscii(hash).replaceAll('\u0000', "").length)
+			if(!!web3.utils.toAscii(hash).replaceAll('\u0000', "").length){
+				const name = await buildContract()?.hashToDomainMap(
+					hash
+				);
+				setEnsName(name)
+			}
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -82,6 +95,7 @@ const Home: NextPage = () => {
 	}, [isDisconnected])
 	
 	const shouldShowMsg = (isDisconnected ? true : onWhiteList)
+	console.log(proof)
 
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
@@ -93,13 +107,17 @@ const Home: NextPage = () => {
 					</span>
 				</div>
 				<div className="flex space-x-6 items-center">
-					<a
-						className="underline md:block hidden"
-						href="onchain.skiptheline.dev"
-						target={"_blank"}
-					>
-						Start your web3 journey today
-					</a>
+					{
+						shouldShowMsg && (
+							<a
+								className="underline md:block hidden"
+								href="onchain.skiptheline.dev"
+								target={"_blank"}
+							>
+								Start your web3 journey today
+							</a>
+						)
+					}
 					{!!isLoginSuccessful && (<div><ConnectButton /></div>)}
 				</div>
 			</div>
@@ -108,6 +126,13 @@ const Home: NextPage = () => {
 				<div className="blob decorative-stuff"/>
 			</div>
 			<div className="max-w-4xl mx-auto md:mb-12 px-4 md:px-0">
+				{
+					!shouldShowMsg && (
+						<>
+							<img className="mx-auto mb-8 rounded-3xl" src="https://media4.giphy.com/media/l0ErQ2UfBNFEIlqjC/giphy.gif?cid=ecf05e47f69jrncvqz3b3ttzqco0sp1dxj2iz56bizguntrx&rid=giphy.gif&ct=g" alt="gif" />
+						</>
+					)
+				}
 				{
 					!hasClaimed && (
 						<div className="text-center md:mb-24 mb-12">
@@ -135,6 +160,17 @@ const Home: NextPage = () => {
 									)
 								}
 							</p>
+							{
+								!shouldShowMsg && (
+									<a
+										className="underline mt-4 md:block hidden"
+										href="https://onchain.skiptheline.dev"
+										target={"_blank"}
+									>
+										Start your web3 journey today
+									</a>
+								)
+							}
 						</div>
 					)
 				}
@@ -147,22 +183,13 @@ const Home: NextPage = () => {
 					) : onWhiteList 
 					? hasClaimed 
 					? (
-						<div className="text-white p-12 backdrop-blur-md flex flex-col space-y-12 m-auto border border-white rounded-3xl w-auto">
-							<div className="font-bold text-4xl">Congratulations 🥳,</div>
-							<div className="text-2xl flex flex-col">
-								You've successfully registered your ens now!
-								<div className="text-base mt-4">
-									<div>
-										Go ahead and set your records, eth address avatars
-										and customise your subdomain!
-									</div>
-									<div>
-										Aur bhai @0xbhaisaab.eth give the content for this
-									</div>
-								</div>
+						<div className="text-white p-12 flex flex-col space-y-12 m-auto border border-white rounded-3xl w-[700px]">
+							<div className="flex items-center justify-between">
+								<h1 className="font-bold text-4xl text-left">Get your sub-domain of your community!</h1>
+								<img src="/biglogo.png" className=" w-36 h-36" alt="" />
 							</div>
-							<div className="w-full">
-								<Button fullWidth>Flaunt this on Twitter</Button>
+							<div className="w-full rounded-lg text-left shadow-[7px_5px_0_2px] shadow-[#1649FF] py-8 px-6 bg-white">
+								<p className="text-5xl text-[#1D263B]" >{`${ensName}.isbuildingon.eth`}</p>
 							</div>
 						</div>
 					)
@@ -192,11 +219,7 @@ const Home: NextPage = () => {
 								)
 							}
 						</form>
-					) : (
-						<>
-							<img className="mx-auto" src="https://media4.giphy.com/media/l0ErQ2UfBNFEIlqjC/giphy.gif?cid=ecf05e47f69jrncvqz3b3ttzqco0sp1dxj2iz56bizguntrx&rid=giphy.gif&ct=g" alt="gif" />
-						</>
-					)
+					) : null
 				}
 			</div>
 		</div>
