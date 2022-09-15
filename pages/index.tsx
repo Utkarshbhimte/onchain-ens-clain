@@ -206,7 +206,7 @@ const Home: NextPage = () => {
 										}}
 									/>
 									<span className="text-white">
-										.buildonchain.eth
+										.isbuildingon.eth
 									</span>
 								</label>
 							)}
