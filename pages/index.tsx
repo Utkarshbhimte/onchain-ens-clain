@@ -42,7 +42,6 @@ const Home: NextPage = () => {
 		setLoading(true)
 		try {
 			const temp = await buildContract(address)?.merkleHash
-			console.log(temp)
 			const response = await buildContract(address)?.domainMap(name)
 			if(!!web3.utils.toAscii(response).replaceAll('\u0000', "").length) {
 				toast.error('ens domain not available!');
@@ -95,7 +94,7 @@ const Home: NextPage = () => {
 	}, [isDisconnected])
 	
 	const shouldShowMsg = (isDisconnected ? true : onWhiteList)
-	console.log(proof)
+	console.log(onWhiteList, hasClaimed)
 
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
