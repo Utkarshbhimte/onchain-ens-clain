@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import Card from "react-animated-3d-card";
+import Button from "./Button";
 
 const ClaimedCard = ({ ensName }: { ensName: string }) => {
-	console.log({ ensName });
+	const joinUrl = `https://join.skiptheline.dev/build-camps/join/${encodeURIComponent(
+		ensName
+	)}`;
+	const handleJoin = () => {
+		const message =
+			"Join me in BuildOnChain and learn exciting things from web3 leaders";
+		const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+			message
+		)}&url=${encodeURIComponent(joinUrl)}`;
+
+		window.open(url, "_blank");
+	};
 
 	if (ensName) {
 		return (
@@ -16,10 +28,14 @@ const ClaimedCard = ({ ensName }: { ensName: string }) => {
 						<img src="/biglogo.png" className=" w-36 h-36" alt="" />
 					</div>
 					<div className="w-full rounded-lg text-left shadow-[7px_5px_0_2px] shadow-[#1649FF] py-8 px-6 bg-white">
-						<p className="text-5xl text-[#1D263B]">{`${ensName}.isbuildingon.eth`}</p>
+						<p className="text-3xl font-medium text-[#1D263B]">{`${ensName}.isbuildingon.eth`}</p>
 					</div>
 					{/* </div> */}
 				</Card>
+
+				<div className="mt-12">
+					<Button onClick={handleJoin}>Tweet it!</Button>
+				</div>
 			</div>
 		);
 	}
