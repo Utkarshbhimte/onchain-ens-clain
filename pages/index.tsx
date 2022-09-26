@@ -63,10 +63,8 @@ const Home: NextPage = () => {
 					proof
 				);
 				await tx.wait();
-				const username = Buffer.from(name as string, "base64").toString(
-					"ascii"
-				);
-				const url = `https://join.skiptheline.dev/build-camps/welcome/${username}`;
+				const username = Buffer.from(name as string).toString("base64");
+				const url = `https://join.skiptheline.dev/on-chain/welcome/${username}`;
 				await fetch(url);
 				setHasClaimed(true);
 				toast.success("Ens Claimed Successfully");

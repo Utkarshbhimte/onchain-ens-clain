@@ -3,8 +3,8 @@ import Card from "react-animated-3d-card";
 import Button from "./Button";
 
 const ClaimedCard = ({ ensName }: { ensName: string }) => {
-	const username = Buffer.from(ensName as string, "base64").toString("ascii");
-	const joinUrl = `https://join.skiptheline.dev/build-camps/join/${encodeURIComponent(
+	const username = Buffer.from(ensName as string).toString("base64");
+	const joinUrl = `https://join.skiptheline.dev/on-chain/join/${encodeURIComponent(
 		username
 	)}`;
 	const handleJoin = () => {
