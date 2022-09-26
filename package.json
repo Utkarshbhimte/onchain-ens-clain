@@ -15,6 +15,7 @@
 		"merkletreejs": "^0.2.32",
 		"next": "12.2.5",
 		"react": "^18",
+		"react-animated-3d-card": "^1.0.2",
 		"react-confetti": "^6.1.0",
 		"react-dom": "^18",
 		"react-toastify": "^9.0.8",
