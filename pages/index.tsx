@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 	const { chain } = useNetwork();
 
 	const { onWhiteList, proof } = useWhiteList(address);
-	console.log({ proof });
+	// console.log({ proof });
 
 	const [loading, setLoading] = useState(false);
 	const [name, setName] = useState("");
@@ -54,12 +54,10 @@ const Home: NextPage = () => {
 				setLoading(false);
 				return;
 			}
-			console.log("something");
 			const tx = await buildContract(address)?.claimSubdomain(
 				name,
 				proof
 			);
-			console.log("something asfasdf");
 			await tx.wait();
 			setHasClaimed(true);
 			setEnsName(name);
@@ -80,7 +78,7 @@ const Home: NextPage = () => {
 		if (!address?.length || !isConnected) return;
 		setLoading(true);
 		try {
-			console.log({ address: address.toLowerCase() });
+			// console.log({ address: address.toLowerCase() });
 			const hash = await buildContract()?.addressToHashmap(
 				address.toLowerCase()
 			);
@@ -108,7 +106,7 @@ const Home: NextPage = () => {
 
 	const shouldShowMsg = !address ? true : onWhiteList;
 
-	console.log({ ensName, onWhiteList, hasClaimed });
+	// console.log({ ensName, onWhiteList, hasClaimed });
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
