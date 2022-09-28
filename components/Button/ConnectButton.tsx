@@ -45,12 +45,18 @@ export const BuildConnectButton = () => {
 							}
 							if (chain.unsupported) {
 								return (
-									<button
-										onClick={openChainModal}
-										type="button"
-									>
-										Wrong network
-									</button>
+									<div>
+										<div className="mb-8 text-2xl">
+											You are not connected to Ethereum
+											network.
+										</div>
+										<Button
+											onClick={openChainModal}
+											type="button"
+										>
+											Switch network
+										</Button>
+									</div>
 								);
 							}
 							return (
