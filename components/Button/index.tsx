@@ -20,7 +20,9 @@ const Button: React.FC<
 			type="button"
 			className={` ${
 				fullWidth ? "w-full" : ""
-			} outline-none inline-flex items-center px-12 py-3 border-none text-base rounded-2xl shadow-sm text-white bg-primary-blue hover:bg-primary-blue focus:outline-none cursor-pointer justify-center font-medium disabled:bg-gray`}
+			} outline-none inline-flex items-center px-12 py-3 border-none text-base rounded-2xl shadow-sm text-white bg-primary-blue hover:bg-primary-blue focus:outline-none ${
+				disabled || loading ? " cursor-not-allowed " : "cursor-pointer"
+			} justify-center font-medium disabled:bg-gray`}
 			onClick={onClick}
 			disabled={loading || disabled}
 		>

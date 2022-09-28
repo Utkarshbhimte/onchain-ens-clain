@@ -42,6 +42,9 @@ const Home: NextPage = () => {
 
 	const claimEns = async (e: any) => {
 		e.preventDefault();
+		if (!name) {
+			toast.error("Please enter a valid name");
+		}
 		setLoading(true);
 		try {
 			setPendingModal(true);
@@ -212,6 +215,7 @@ const Home: NextPage = () => {
 									<Button
 										loading={loading}
 										onClick={claimEns}
+										disabled={!name}
 									>
 										Claim Your ENS!
 									</Button>
