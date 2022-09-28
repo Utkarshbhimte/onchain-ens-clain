@@ -28,6 +28,8 @@ const addresses = [
 	"0xfd8b8E92ebc0D393e50e5e73C6126a1bF0289FEc",
 	"0x31dda005e0ec83c19bdb95979876c70a299a8600",
 	"0xF3aDeed69bCd751b6D3518874a25B3324c432228",
+	"0x567432D65B1Ab2f3Bf118d9Ab02A7b63beD31dB9",
+	"0xa0a112f44b44d49C8401cc7f223566187cAcd2E4",
 ];
 
 export const generateMerkleTree = () => {
