@@ -16,7 +16,14 @@ const selectedChain =
 const { chains, provider } = configureChains(
 	[selectedChain],
 	[
-		jsonRpcProvider({ rpc: () => ({ http: selectedChain === chain.rinkeby ? "https://rpc.ankr.com/eth_rinkeby" : "https://rpc.ankr.com/eth" }) }),
+		jsonRpcProvider({
+			rpc: () => ({
+				http:
+					selectedChain === chain.rinkeby
+						? "https://rpc.ankr.com/eth_rinkeby"
+						: "https://rpc.ankr.com/eth",
+			}),
+		}),
 		publicProvider(),
 	]
 );

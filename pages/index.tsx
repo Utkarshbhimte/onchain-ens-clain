@@ -157,8 +157,8 @@ const Home: NextPage = () => {
 						<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
 							{shouldShowMsg ? (
 								<>
-									Welcome, <br /> Let’s get you a custom{" "}
-									<br /> ENS subdomain
+									You are now a builder on chain. Get your
+									identity now!
 								</>
 							) : (
 								<>Sorry this wallet is not whitelisted</>

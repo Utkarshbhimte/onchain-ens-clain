@@ -56,7 +56,7 @@ const ClaimedCard = ({
 						<Card>
 							<div className="flex items-center justify-between">
 								<h1 className="font-bold text-4xl text-left">
-									Get your sub-domain of your community!
+									I am a Builder on chain
 								</h1>
 								<img
 									src="/biglogo.png"
