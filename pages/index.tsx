@@ -5,7 +5,7 @@ import Modal from "@/components/Modal";
 import WavesImage from "@/components/Waves";
 import useWhiteList from "@/hooks/useWhiteList";
 import { buildContract } from "@/utils/buildContract";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton, connectorsForWallets } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -18,6 +18,7 @@ const Home: NextPage = () => {
 	const { chain } = useNetwork();
 
 	const { onWhiteList, proof } = useWhiteList(address);
+	console.log({ proof });
 
 	const [loading, setLoading] = useState(false);
 	const [name, setName] = useState("");
@@ -39,46 +40,44 @@ const Home: NextPage = () => {
 
 	const isLoginSuccessful = isValidChain && isConnected;
 
-	const claimEns = useCallback(
-		async (e: any) => {
-			e.preventDefault();
-			setLoading(true);
-			try {
-				setPendingModal(true);
-				const temp = await buildContract(address)?.merkleHash;
-				const response = await buildContract(address)?.domainMap(name);
-				if (
-					!!web3.utils.toAscii(response).replaceAll("\u0000", "")
-						.length
-				) {
-					toast.error("ens domain not available!");
-					setLoading(false);
-					return;
-				}
-				const tx = await buildContract(address)?.claimSubdomain(
-					name,
-					proof
-				);
-				await tx.wait();
-				const username = Buffer.from(name as string).toString("base64");
-				const url = `https://join.skiptheline.dev/on-chain/welcome/${username}`;
-				await fetch(url);
-				setHasClaimed(true);
-				toast.success("Ens Claimed Successfully");
-				// router.push('/congratulations')
-			} catch (error) {
-				console.error(error);
-			} finally {
-				setPendingModal(false);
+	const claimEns = async (e: any) => {
+		e.preventDefault();
+		setLoading(true);
+		try {
+			setPendingModal(true);
+			const temp = await buildContract(address)?.merkleHash;
+			const response = await buildContract(address)?.domainMap(name);
+			if (
+				!!web3.utils.toAscii(response).replaceAll("\u0000", "").length
+			) {
+				toast.error("ens domain not available!");
 				setLoading(false);
+				return;
 			}
-		},
-		[name, proof]
-	);
+			console.log("something");
+			const tx = await buildContract(address)?.claimSubdomain(
+				name,
+				proof
+			);
+			console.log("something asfasdf");
+			await tx.wait();
+			setHasClaimed(true);
+			setEnsName(name);
+			const username = Buffer.from(name as string).toString("base64");
+			const url = `https://join.skiptheline.dev/on-chain/welcome/${username}`;
+			await fetch(url);
+			toast.success("Ens Claimed Successfully");
+			// router.push('/congratulations')
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setPendingModal(false);
+			setLoading(false);
+		}
+	};
 
 	const checkIfAlreadyExists = useCallback(async () => {
 		if (!address?.length || !isConnected) return;
-		console.log("comin here");
 		setLoading(true);
 		try {
 			console.log({ address: address.toLowerCase() });
@@ -88,10 +87,6 @@ const Home: NextPage = () => {
 			setHasClaimed(
 				!!web3.utils.toAscii(hash).replaceAll("\u0000", "").length
 			);
-			console.log({
-				claimed: !!web3.utils.toAscii(hash).replaceAll("\u0000", "")
-					.length,
-			});
 			if (!!web3.utils.toAscii(hash).replaceAll("\u0000", "").length) {
 				const name = await buildContract()?.hashToDomainMap(hash);
 				setEnsName(name);
@@ -113,7 +108,7 @@ const Home: NextPage = () => {
 
 	const shouldShowMsg = !address ? true : onWhiteList;
 
-	console.log({ ensName });
+	console.log({ ensName, onWhiteList, hasClaimed });
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
