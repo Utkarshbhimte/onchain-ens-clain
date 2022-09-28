@@ -55,21 +55,26 @@ const ClaimedCard = ({
 					<>
 						<Card>
 							<div className="flex items-center justify-between">
-								<h1 className="font-bold text-4xl text-left">
-									I am a Builder on chain
-								</h1>
+								<div className="flex-col mr-20">
+									<h1 className="font-bold text-4xl text-left">
+										I'm a Builder On Chain ✨
+									</h1>
+									<div className="text-left text-gray text-lg">
+										I just claimed my onchain identity
+									</div>
+								</div>
 								<img
 									src="/biglogo.png"
-									className=" w-36 h-36"
+									className=" w-28 h-28"
 									alt=""
 								/>
 							</div>
 							<div className="w-full rounded-lg text-left shadow-[7px_5px_0_2px] shadow-[#1649FF] py-8 px-6 bg-white">
-								<p className="text-3xl font-medium text-[#1D263B]">{`${ensName}.isbuildingon.eth`}</p>
+								<p className="text-3xl font-medium text-[#1D263B]">{`${ensName}.builderonchain.eth`}</p>
 							</div>
 						</Card>
 
-						<div className="mt-12">
+						<div className="mt-8">
 							<Button onClick={handleJoin}>Tweet it!</Button>
 						</div>
 					</>

@@ -40,7 +40,8 @@ h1 {
 
 .parallax-card-layers {
 	background: transparent !important;
-	max-width: 700px;
+	/* max-width: 700px; */
+	width: 800px;
 	@apply text-white p-12 flex flex-col space-y-12 m-auto
-		border border-white rounded-3xl bg-transparent;
+		border border-white rounded-3xl bg-transparent w-full;
 }
