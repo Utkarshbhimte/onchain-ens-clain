@@ -27,6 +27,7 @@ const addresses = [
 	"0xCF193782f2eBC069ae05eC0Ef955E4B042D000Dd",
 	"0xfd8b8E92ebc0D393e50e5e73C6126a1bF0289FEc",
 	"0x31dda005e0ec83c19bdb95979876c70a299a8600",
+	"0xF3aDeed69bCd751b6D3518874a25B3324c432228",
 ];
 
 export const generateMerkleTree = () => {
@@ -41,6 +42,9 @@ export const generateMerkleTree = () => {
 
 export const verifyWeb = (address: string) => {
 	const { merkleTree, rootHash } = generateMerkleTree();
+
+	console.log({ rootHash });
+
 	let hashedAddress = keccak256(address);
 	let proof = merkleTree.getHexProof(hashedAddress);
 
