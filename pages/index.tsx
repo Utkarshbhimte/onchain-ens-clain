@@ -1,18 +1,16 @@
 import Button from "@/components/Button";
 import { BuildConnectButton } from "@/components/Button/ConnectButton";
+import ClaimedCard from "@/components/ClaimedCard";
+import Modal from "@/components/Modal";
 import WavesImage from "@/components/Waves";
 import useWhiteList from "@/hooks/useWhiteList";
 import { buildContract } from "@/utils/buildContract";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useAccount, useContract, useNetwork, useSigner } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import web3 from "web3";
-import Card from "react-animated-3d-card";
-import ClaimedCard from "@/components/ClaimedCard";
-import Modal from "@/components/Modal";
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
@@ -68,7 +66,6 @@ const Home: NextPage = () => {
 				setHasClaimed(true);
 				toast.success("Ens Claimed Successfully");
 				// router.push('/congratulations')
-				console.log("Transaction successfull");
 			} catch (error) {
 				console.error(error);
 			} finally {
@@ -81,14 +78,20 @@ const Home: NextPage = () => {
 
 	const checkIfAlreadyExists = useCallback(async () => {
 		if (!address?.length || !isConnected) return;
+		console.log("comin here");
 		setLoading(true);
 		try {
+			console.log({ address: address.toLowerCase() });
 			const hash = await buildContract()?.addressToHashmap(
 				address.toLowerCase()
 			);
 			setHasClaimed(
 				!!web3.utils.toAscii(hash).replaceAll("\u0000", "").length
 			);
+			console.log({
+				claimed: !!web3.utils.toAscii(hash).replaceAll("\u0000", "")
+					.length,
+			});
 			if (!!web3.utils.toAscii(hash).replaceAll("\u0000", "").length) {
 				const name = await buildContract()?.hashToDomainMap(hash);
 				setEnsName(name);
@@ -110,6 +113,7 @@ const Home: NextPage = () => {
 
 	const shouldShowMsg = !address ? true : onWhiteList;
 
+	console.log({ ensName });
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
@@ -186,7 +190,7 @@ const Home: NextPage = () => {
 					</div>
 				) : onWhiteList ? (
 					hasClaimed ? (
-						<ClaimedCard ensName={ensName} />
+						<ClaimedCard loading={loading} ensName={ensName} />
 					) : (
 						<form className="" onSubmit={claimEns}>
 							{isLoginSuccessful && (
@@ -243,7 +247,9 @@ const Home: NextPage = () => {
 					</svg>
 
 					<div>
-						<div>ENS subdomain claiming in process...</div>
+						<div className=" font-medium text-center">
+							ENS subdomain claiming in process...
+						</div>
 					</div>
 				</div>
 			</Modal>
