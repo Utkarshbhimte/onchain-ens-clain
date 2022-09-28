@@ -47,11 +47,11 @@ const Home: NextPage = () => {
 			setPendingModal(true);
 			const temp = await buildContract(address)?.merkleHash;
 
-			console.log({ temp });
+			console.log({ temp, address, name, proof });
 
 			const response = await buildContract(address)?.domainMap(name);
 
-			console.log({ response });
+			console.log({ response, name });
 			if (
 				!!web3.utils.toAscii(response).replaceAll("\u0000", "").length
 			) {
