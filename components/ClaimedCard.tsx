@@ -14,8 +14,9 @@ const ClaimedCard = ({
 	)}`;
 
 	const handleJoin = () => {
-		const message =
-			"Join me in BuildOnChain and learn exciting things from web3 leaders";
+		const message = `I just claimed my exclusive identity as a builder at @Build_OnChain.
+
+Want to become a builder? 👇🏻`;
 		const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
 			message
 		)}&url=${encodeURIComponent(joinUrl)}`;
