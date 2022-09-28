@@ -58,7 +58,7 @@ const Home: NextPage = () => {
 			if (
 				!!web3.utils.toAscii(response).replaceAll("\u0000", "").length
 			) {
-				toast.error("ens domain not available!");
+				toast.error("Ens subdomain not available!");
 				setLoading(false);
 				return;
 			}
@@ -72,10 +72,11 @@ const Home: NextPage = () => {
 			const username = Buffer.from(name as string).toString("base64");
 			const url = `https://join.skiptheline.dev/on-chain/welcome/${username}`;
 			await fetch(url);
-			toast.success("Ens Claimed Successfully");
+			toast.success("Ens subdomain successfully");
 			// router.push('/congratulations')
 		} catch (error) {
 			console.error(error);
+			toast.error(error.message ?? "Failed to claim subdomain");
 		} finally {
 			setPendingModal(false);
 			setLoading(false);
@@ -99,6 +100,7 @@ const Home: NextPage = () => {
 			}
 		} catch (error) {
 			console.error(error);
+			toast.error(error.message ?? "Something went wrong");
 		} finally {
 			setLoading(false);
 		}
