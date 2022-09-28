@@ -117,6 +117,9 @@ const Home: NextPage = () => {
 	const shouldShowMsg = !address ? true : onWhiteList;
 
 	// console.log({ ensName, onWhiteList, hasClaimed });
+
+	console.log("hello world: Akhil");
+
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
@@ -158,8 +161,8 @@ const Home: NextPage = () => {
 					</>
 				)}
 				{!hasClaimed && (
-					<div className="text-center md:mb-24 mb-12">
-						<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
+					<div className="text-center md:mb-24 mb-12 sm:invisible md:visible">
+						<h1 className="md:text-6xl text-2xl sm:text-4xl font-bold leading-13 mb-4">
 							{shouldShowMsg ? (
 								<>
 									You are a builder on chain. Get your
@@ -195,35 +198,45 @@ const Home: NextPage = () => {
 					hasClaimed ? (
 						<ClaimedCard loading={loading} ensName={ensName} />
 					) : (
-						<form className="" onSubmit={claimEns}>
-							{isLoginSuccessful && (
-								<label className="flex space-x-2 items-center border border-white/[.1] focus-within:border-white rounded-2xl py-4 px-4 mb-4 focus-within:bg-white/[.05] transition-all duration-300 backdrop-blur">
-									<input
-										type="text"
-										placeholder="Enter your sub-domain"
-										className=" border-0 flex-1 bg-transparent block w-full focus:outline-none"
-										value={name}
-										onChange={(e) => {
-											setName(e.target.value);
-										}}
-									/>
-									<span className="text-white">
-										.builderonchain.eth
-									</span>
-								</label>
-							)}
-							{!!isLoginSuccessful && (
-								<div className="flex items-center justify-around">
-									<Button
-										loading={loading}
-										onClick={claimEns}
-										disabled={!name}
-									>
-										Claim Your ENS!
-									</Button>
-								</div>
-							)}
-						</form>
+						<>
+							<div className="md:hidden text-5xl font-semibold p-4 leading-snug">
+								For Better Experience open this link on Desktop
+								View <br />
+								<br /> We don't support mobile as of now.
+							</div>
+							<form
+								className="sm:invisible md:visible"
+								onSubmit={claimEns}
+							>
+								{isLoginSuccessful && (
+									<label className="flex space-x-2 items-center border border-white/[.1] focus-within:border-white rounded-2xl py-4 px-4 mb-4 focus-within:bg-white/[.05] transition-all duration-300 backdrop-blur">
+										<input
+											type="text"
+											placeholder="Enter your sub-domain"
+											className=" border-0 flex-1 bg-transparent block w-full focus:outline-none"
+											value={name}
+											onChange={(e) => {
+												setName(e.target.value);
+											}}
+										/>
+										<span className="text-white">
+											.builderonchain.eth
+										</span>
+									</label>
+								)}
+								{!!isLoginSuccessful && (
+									<div className="flex items-center justify-around">
+										<Button
+											loading={loading}
+											onClick={claimEns}
+											disabled={!name}
+										>
+											Claim Your ENS!
+										</Button>
+									</div>
+								)}
+							</form>
+						</>
 					)
 				) : null}
 			</div>
