@@ -76,7 +76,7 @@ const Home: NextPage = () => {
 			// router.push('/congratulations')
 		} catch (error) {
 			console.error(error);
-			toast.error(error.message ?? "Failed to claim subdomain");
+			toast.error("Failed to claim subdomain");
 		} finally {
 			setPendingModal(false);
 			setLoading(false);
@@ -100,7 +100,7 @@ const Home: NextPage = () => {
 			}
 		} catch (error) {
 			console.error(error);
-			toast.error(error.message ?? "Something went wrong");
+			toast.error("Something went wrong");
 		} finally {
 			setLoading(false);
 		}
