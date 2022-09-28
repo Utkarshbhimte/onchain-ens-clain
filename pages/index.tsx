@@ -157,7 +157,7 @@ const Home: NextPage = () => {
 						<h1 className="md:text-6xl text-2xl font-bold leading-13 mb-4">
 							{shouldShowMsg ? (
 								<>
-									You are now a builder on chain. Get your
+									You are a builder on chain. Get your
 									identity now!
 								</>
 							) : (
