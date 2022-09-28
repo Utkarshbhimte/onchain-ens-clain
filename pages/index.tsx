@@ -18,7 +18,6 @@ const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
 const Home: NextPage = () => {
 	const { isConnected, address, isDisconnected } = useAccount();
 	const { chain } = useNetwork();
-	const router = useRouter();
 
 	const { onWhiteList, proof } = useWhiteList(address);
 
@@ -109,8 +108,7 @@ const Home: NextPage = () => {
 		if (isDisconnected) setHasClaimed(false);
 	}, [isDisconnected]);
 
-	const shouldShowMsg = isDisconnected ? true : onWhiteList;
-	console.log(onWhiteList, hasClaimed);
+	const shouldShowMsg = !address ? true : onWhiteList;
 
 	return (
 		<div className="py-6 justify-center text-center bg-dark-blue h-screen flex items-center text-white flex-col">
@@ -143,7 +141,7 @@ const Home: NextPage = () => {
 				<div className="blob decorative-stuff" />
 			</div>
 			<div className="max-w-4xl mx-auto md:mb-12 px-4 md:px-0">
-				{!shouldShowMsg && (
+				{!shouldShowMsg && address && (
 					<>
 						<img
 							className="mx-auto mb-8 rounded-3xl"
@@ -165,17 +163,10 @@ const Home: NextPage = () => {
 							)}
 						</h1>
 						<p className="md:text-xl text-md">
-							{shouldShowMsg ? (
-								<>
-									You can use this to easily recieve & send
-									tokens in your wallet.
-								</>
-							) : (
-								<>
-									You can use this to easily recieve & send
-									tokens in your wallet.
-								</>
-							)}
+							<>
+								You can use this to easily recieve & send tokens
+								in your wallet.
+							</>
 						</p>
 						{!shouldShowMsg && (
 							<a
