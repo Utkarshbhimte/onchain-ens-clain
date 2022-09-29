@@ -1,15 +1,21 @@
+import buildContractABI from "../abis/build.json";
 import Button from "@/components/Button";
 import { BuildConnectButton } from "@/components/Button/ConnectButton";
 import ClaimedCard from "@/components/ClaimedCard";
 import Modal from "@/components/Modal";
 import WavesImage from "@/components/Waves";
 import useWhiteList from "@/hooks/useWhiteList";
-import { buildContract } from "@/utils/buildContract";
+import { buildContract, contractAddress } from "@/utils/buildContract";
 import { ConnectButton, connectorsForWallets } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useAccount, useNetwork } from "wagmi";
+import {
+	useAccount,
+	useContractWrite,
+	useNetwork,
+	usePrepareContractWrite,
+} from "wagmi";
 import web3 from "web3";
 
 const preferredChainId = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
@@ -18,7 +24,7 @@ const Home: NextPage = () => {
 	const { chain } = useNetwork();
 
 	const { onWhiteList, proof } = useWhiteList(address);
-	// console.log({ proof });
+	console.log({ proof });
 
 	const [loading, setLoading] = useState(false);
 	const [name, setName] = useState("");
@@ -26,6 +32,15 @@ const Home: NextPage = () => {
 	const [hasClaimed, setHasClaimed] = useState(false);
 
 	const [pendingModal, setPendingModal] = useState(false);
+
+	const { config, error: txError } = usePrepareContractWrite({
+		addressOrName: contractAddress,
+		contractInterface: buildContractABI,
+		functionName: "claimSubdomain",
+		args: [name, proof],
+	});
+
+	const { writeAsync } = useContractWrite(config);
 
 	// const signer = useSigner();
 
@@ -60,13 +75,15 @@ const Home: NextPage = () => {
 			) {
 				toast.error("Ens subdomain not available!");
 				setLoading(false);
+				setName("");
 				return;
 			}
-			const tx = await buildContract(address)?.claimSubdomain(
-				name,
-				proof
-			);
-			await tx.wait();
+			// const tx = await buildContract(address)?.claimSubdomain(
+			// 	name,
+			// 	proof
+			// );
+			await writeAsync?.();
+			// await tx.wait();
 			setHasClaimed(true);
 			setEnsName(name);
 			const username = Buffer.from(name as string).toString("base64");
@@ -76,7 +93,10 @@ const Home: NextPage = () => {
 			// router.push('/congratulations')
 		} catch (error) {
 			console.error(error);
+			toast.error(txError?.message);
 			toast.error("Failed to claim subdomain");
+			setName("");
+			setHasClaimed(false);
 		} finally {
 			setPendingModal(false);
 			setLoading(false);
