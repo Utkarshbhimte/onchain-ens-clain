@@ -145,14 +145,12 @@ const Home: NextPage = () => {
 			<div className="flex justify-between max-w-7xl mx-auto fixed top-0 py-6 w-full px-4 md:px-0">
 				<div className="flex items-center space-x-2">
 					<img src="/logo.png" alt="" />
-					<span className="font-medium md:block hidden">
-						BuildOnChain
-					</span>
+					<span className="font-medium">BuildOnChain</span>
 				</div>
 				<div className="flex space-x-6 items-center">
 					{shouldShowMsg && (
 						<a
-							className="underline md:block hidden"
+							className="underline"
 							href="onchain.skiptheline.dev"
 							target={"_blank"}
 						>
@@ -200,7 +198,7 @@ const Home: NextPage = () => {
 						</p>
 						{!shouldShowMsg && (
 							<a
-								className="underline mt-4 md:block hidden"
+								className="underline mt-4"
 								href="https://onchain.skiptheline.dev"
 								target={"_blank"}
 							>
@@ -219,11 +217,6 @@ const Home: NextPage = () => {
 						<ClaimedCard loading={loading} ensName={ensName} />
 					) : (
 						<>
-							<div className="md:hidden text-5xl font-semibold p-4 leading-snug">
-								For Better Experience open this link on Desktop
-								View <br />
-								<br /> We don't support mobile as of now.
-							</div>
 							<form
 								className="sm:invisible md:visible"
 								onSubmit={claimEns}
