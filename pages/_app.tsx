@@ -25,9 +25,10 @@ const { chains, provider } = configureChains(
 						: "https://rpc.ankr.com/eth",
 			}),
 		}),
-		alchemyProvider({
-			apiKey: "gB7n0nQo3zsJZnQKSK2iPQd_g-wm_tef",
-		}),
+		// alchemyProvider({
+		// 	// apiKey: process.env.NEXT_PUBLIC_RPC,
+		// 	apiKey: "gB7n0nQo3zsJZnQKSK2iPQd_g-wm_tef",
+		// }),
 		publicProvider(),
 	]
 );
