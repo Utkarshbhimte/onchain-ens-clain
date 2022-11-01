@@ -7,6 +7,7 @@ import { publicProvider } from "wagmi/providers/public";
 import type { AppProps } from "next/app";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { alchemyProvider } from "wagmi/providers/alchemy";
 
 const selectedChain =
 	Number(process.env.NEXT_PUBLIC_CHAIN_ID) === 4
@@ -23,6 +24,9 @@ const { chains, provider } = configureChains(
 						? "https://rpc.ankr.com/eth_rinkeby"
 						: "https://rpc.ankr.com/eth",
 			}),
+		}),
+		alchemyProvider({
+			apiKey: "gB7n0nQo3zsJZnQKSK2iPQd_g-wm_tef",
 		}),
 		publicProvider(),
 	]
